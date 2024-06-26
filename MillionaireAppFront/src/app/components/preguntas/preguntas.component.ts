@@ -14,6 +14,8 @@ export class PreguntasComponent implements OnInit {
   textoPregunta: string = '';
   manejarRespuestaCorrecta = new EventEmitter<void>(); // Definir el EventEmitter
   private respuestasCorrectasContador: number = 0;
+  private preguntasMostradas: number[] = []; // Arreglo para almacenar los IDs de las preguntas mostradas
+
   constructor(private preguntaService: PreguntaService) {}
 
   ngOnInit() {
@@ -50,14 +52,28 @@ export class PreguntasComponent implements OnInit {
       next: (preguntas: Preguntas[]) => {
         console.log('Preguntas recibidas:', preguntas); // Verificar los datos recibidos
         if (preguntas.length > 0) {
-          const indiceAleatorio = Math.floor(Math.random() * preguntas.length);
-          const preguntaAleatoria = preguntas[indiceAleatorio];
-          this.textoPregunta = preguntaAleatoria.textoPregunta;
-          console.log(preguntaAleatoria.preguntaID);
-          this.preguntaService.actualizarPreguntaId2(preguntaAleatoria.preguntaID);
-        } else if (preguntas.length === 1) {
-          this.textoPregunta = preguntas[0].textoPregunta;
-          this.preguntaService.actualizarPreguntaId2(preguntas[0].preguntaID);
+          let preguntaAleatoria;
+          let intentos = 0;
+
+          // Buscar una pregunta que no haya sido mostrada antes
+          do {
+            const indiceAleatorio = Math.floor(Math.random() * preguntas.length);
+            preguntaAleatoria = preguntas[indiceAleatorio];
+            intentos++;
+          } while (this.preguntasMostradas.includes(preguntaAleatoria.preguntaID) && intentos < 10);
+
+          // Si no se encontró una nueva pregunta después de 10 intentos, tomar la primera no mostrada
+          if (this.preguntasMostradas.includes(preguntaAleatoria.preguntaID)) {
+            preguntaAleatoria = preguntas.find(p => !this.preguntasMostradas.includes(p.preguntaID));
+          }
+
+          if (preguntaAleatoria) {
+            this.textoPregunta = preguntaAleatoria.textoPregunta;
+            this.preguntaService.actualizarPreguntaId2(preguntaAleatoria.preguntaID);
+            this.preguntasMostradas.push(preguntaAleatoria.preguntaID); // Agregar ID de la pregunta mostrada
+          } else {
+            console.error('No se encontraron preguntas nuevas para la dificultad especificada');
+          }
         } else {
           console.error('No se encontraron preguntas para la dificultad especificada');
         }

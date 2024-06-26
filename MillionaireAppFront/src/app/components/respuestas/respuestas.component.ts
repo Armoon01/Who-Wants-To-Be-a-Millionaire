@@ -12,7 +12,7 @@ export class RespuestasComponent implements OnInit {
   preguntaId2!: number;
   @Output() aumentarPuntaje = new EventEmitter<number>();
   @Output() manejarRespuestaCorrecta = new EventEmitter<void>();
-
+  @Output() manejarRespuestaIncorrecta = new EventEmitter<void>();
   opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string }[] = [];
   protected animationInterval: any;
   protected seleccionada: any = null; // Variable para rastrear la opción seleccionada
@@ -94,10 +94,12 @@ export class RespuestasComponent implements OnInit {
           this.seleccionada = null;
         }, 1001);
         opcion.estadoColor = 'rojo';
+        this.manejarRespuestaIncorrecta.emit(); // Emitir evento para manejar la respuesta incorrecta
       } else {
         this.preguntaService.actualizarPreguntaCorrecta(1);
         this.manejarRespuestaCorrecta.emit(); // Emitir evento para manejar la respuesta correcta
         this.aumentarPuntaje.emit(100); // Emitir evento para aumentar el puntaje
+
         setTimeout(() => {
           opcion.estadoColor = 'verde';
           this.seleccionada = null;

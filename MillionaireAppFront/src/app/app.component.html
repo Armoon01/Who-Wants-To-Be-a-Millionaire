@@ -14,7 +14,7 @@
            <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <app-respuestas #apprespuestas (manejarRespuestaCorrecta)="preguntasComponent.manejarRespuestaCorrecta.emit()" (aumentarPuntaje)="menuPremiosComponent.aumentarPuntaje($event)"></app-respuestas>
+                    <app-respuestas #apprespuestas (manejarRespuestaIncorrecta)="menuPremiosComponent.manejarRespuestaIncorrecta.emit()" (manejarRespuestaCorrecta)="preguntasComponent.manejarRespuestaCorrecta.emit()" (aumentarPuntaje)="menuPremiosComponent.aumentarPuntaje($event)"></app-respuestas>
                 </div>
                 <div class="col-1"></div>
             </div>

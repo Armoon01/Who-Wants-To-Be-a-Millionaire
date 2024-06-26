@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-menu-premios',
@@ -8,11 +8,21 @@ import { Component, OnInit } from '@angular/core';
 export class MenuPremiosComponent implements OnInit{
   ngOnInit(){
     this.opciones[14] = {numPregunta: 1, estadoColor: 'amarillo'};
+    this.manejarRespuestaIncorrecta.subscribe(() => {
+      if(this.currentScore ==0){
+        this.opciones[14] = {numPregunta: 1, estadoColor: 'rojo'};
+      }else{
+        let nivelIndex = Math.floor(this.currentScore / 100);
+        let nivelActual = 14-nivelIndex;
+        this.opciones[nivelActual] = {numPregunta: nivelActual, estadoColor: 'rojo'};
+        console.log(this.opciones[nivelIndex]);
+      }
+    });
   }
   preguntaEstado: boolean[] = Array(15).fill(false); // Inicializa todos los niveles como no alcanzados
   currentScore: number = 0;
   opciones: {numPregunta: number, estadoColor: string }[] = [];
-
+  manejarRespuestaIncorrecta = new EventEmitter<void>();
   aumentarPuntaje(puntos: number) {
     this.currentScore += puntos;
     // Asume que cada pregunta correcta vale 100 puntos

@@ -36,3 +36,15 @@
   background-color: #d4edda;
   color: #155724;
 }
+.table-responsive {
+  animation: highlight 1s;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: yellow;
+  }
+  100% {
+    background-color: transparent;
+  }
+}

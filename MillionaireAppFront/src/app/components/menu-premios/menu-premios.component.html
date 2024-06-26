@@ -13,11 +13,13 @@
       <tr *ngFor="let level of preguntaEstado; let i = index" [class.bg-success]="preguntaEstado[i]">
         <td [ngClass]="{
           'bg-success': getColorEstado(i) === 'verde',
-          'bg-warning': getColorEstado(i) === 'amarillo'
+          'bg-warning': getColorEstado(i) === 'amarillo',
+          'bg-danger': getColorEstado(i) === 'rojo'
         }">{{ 15 - i }}</td>
         <td [ngClass]="{
           'bg-success': getColorEstado(i) === 'verde',
           'bg-warning': getColorEstado(i) === 'amarillo',
+          'bg-danger': getColorEstado(i) === 'rojo'
         }">{{ (15 - i) * 100 }}</td>
       </tr>
     </tbody>
