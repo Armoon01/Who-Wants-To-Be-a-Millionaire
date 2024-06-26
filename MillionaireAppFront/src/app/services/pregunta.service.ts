@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Preguntas } from '../models/preguntas.model';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +13,20 @@ export class PreguntaService {
   preguntaId2$ = this.preguntaId2Source.asObservable();
   private preguntaIdSource = new BehaviorSubject<number | null>(null);
   preguntaId$ = this.preguntaId2Source.asObservable();
+
   constructor(private http: HttpClient) { }
+
   actualizarPreguntaId2(id: number) {
     this.preguntaId2Source.next(id);
   }
+
   actualizarPreguntaCorrecta(id: number) {
-      let number = this.preguntaIdSource.getValue();
-      if(number!=null){
-        this.preguntaIdSource.next(number+id);
-      }
-      
+    let number = this.preguntaIdSource.getValue();
+    if (number != null) {
+      this.preguntaIdSource.next(number + id);
+    }
   }
+
   private handleError(error: any): Observable<never> {
     console.error('An error occurred:', error);
     return throwError(error.message || error);
@@ -54,6 +56,7 @@ export class PreguntaService {
     return this.http.delete<void>(`${this.apiUrl}/Eliminar/${id}`)
       .pipe(catchError(this.handleError));
   }
+
   obtenerPorDif(id: number): Observable<Preguntas[]> {
     return this.http.get<Preguntas[]>(`${this.apiUrl}/Obtener-por-dif?dif=${id}`)
       .pipe(catchError(this.handleError));

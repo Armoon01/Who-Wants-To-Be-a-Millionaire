@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, Output ,EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { OpcionRespuestaService } from '../../services/opcion-respuesta.service';
 import { PreguntaService } from '../../services/pregunta.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-respuestas',
@@ -11,19 +10,20 @@ import { Subscription } from 'rxjs';
 export class RespuestasComponent implements OnInit {
 
   preguntaId2!: number;
-  @Output() aumentarPuntaje = new EventEmitter<number>();manejarRespuestaCorrecta: EventEmitter<void> = new EventEmitter();
+  @Output() aumentarPuntaje = new EventEmitter<number>();
+  @Output() manejarRespuestaCorrecta = new EventEmitter<void>();
+
   opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string }[] = [];
   protected animationInterval: any;
   protected seleccionada: any = null; // Variable para rastrear la opción seleccionada
 
-  constructor(private opcionRespuestaService: OpcionRespuestaService,private preguntaService: PreguntaService) {}
+  constructor(private opcionRespuestaService: OpcionRespuestaService, private preguntaService: PreguntaService) {}
 
   ngOnInit() {
-    
-    this.preguntaService.preguntaId2$.subscribe( preguntaId2 => {
-      if ( preguntaId2 != undefined) {
-        console.log( preguntaId2);
-        this.cargarRespuestas( preguntaId2);
+    this.preguntaService.preguntaId2$.subscribe(preguntaId2 => {
+      if (preguntaId2 != undefined) {
+        console.log(preguntaId2);
+        this.cargarRespuestas(preguntaId2);
       }
     });
   }
@@ -36,6 +36,8 @@ export class RespuestasComponent implements OnInit {
         console.log('Respuestas seleccionadas:', respuestasSeleccionadas); // Verificar después de seleccionar
         this.opciones = this.ordenarAleatoriamente(respuestasSeleccionadas).map(opcion => ({ ...opcion, estadoColor: '' }));
         console.log('Opciones finales:', this.opciones); // Verificar el estado final
+        this.seleccionada = null; // Reiniciar la selección
+        this.clearAnimationInterval(); // Limpiar el intervalo de animación
       },
       error: (error) => console.error(error)
     });
@@ -44,18 +46,18 @@ export class RespuestasComponent implements OnInit {
   seleccionarRespuestasAleatorias(respuestas: any[], cantidad: number): any[] {
     const respuestasCorrectas = respuestas.filter(respuesta => respuesta.esCorrecta);
     const respuestasIncorrectas = respuestas.filter(respuesta => !respuesta.esCorrecta);
-  
+
     const respuestasSeleccionadas = new Set();
     while (respuestasSeleccionadas.size < cantidad - 1) {
       const index = Math.floor(Math.random() * respuestasIncorrectas.length);
       respuestasSeleccionadas.add(respuestasIncorrectas[index]);
     }
-  
+
     if (respuestasCorrectas.length > 0) {
       const indexCorrecta = Math.floor(Math.random() * respuestasCorrectas.length);
       respuestasSeleccionadas.add(respuestasCorrectas[indexCorrecta]);
     }
-  
+
     return Array.from(respuestasSeleccionadas);
   }
 
@@ -74,6 +76,7 @@ export class RespuestasComponent implements OnInit {
       this.seleccionada = opcion;
     }
   }
+
   iniciarAnimacion(opcion: any) {
     let counter = 0;
     this.animationInterval = setInterval(() => {
@@ -87,17 +90,26 @@ export class RespuestasComponent implements OnInit {
           const opcionCorrecta = this.opciones.find(op => op.esCorrecta);
           if (opcionCorrecta) {
             opcionCorrecta.estadoColor = 'verde';
-          } // Asegurarse de que la opción incorrecta se quede roja después de la animación
-          this.seleccionada = null; // Reiniciamos la selección después de la animación
+          }
+          this.seleccionada = null;
         }, 1001);
-        opcion.estadoColor = 'rojo'; // Iluminar la opción correcta un segundo después
+        opcion.estadoColor = 'rojo';
       } else {
         this.preguntaService.actualizarPreguntaCorrecta(1);
         this.manejarRespuestaCorrecta.emit(); // Emitir evento para manejar la respuesta correcta
         this.aumentarPuntaje.emit(100); // Emitir evento para aumentar el puntaje
-        opcion.estadoColor = 'verde';
-        this.seleccionada = null; // Reiniciamos la selección después de la animación
+        setTimeout(() => {
+          opcion.estadoColor = 'verde';
+          this.seleccionada = null;
+        }, 2000);
       }
-    }, 2000); // La animación durará 2 segundos
+    }, 2000);
+  }
+
+  clearAnimationInterval() {
+    if (this.animationInterval) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
   }
 }

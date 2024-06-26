@@ -1,10 +1,30 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .preguntas {
   margin-top: 20px;
-  background-color: #f1f1f1;
-  border-right: 2px solid #ccc;
+  background-color: #edf2f4;
+  border-right: 2px solid #8d99ae;
+  padding: 20px;
+  border-radius: 10px;
 }
-.enunciado{
-    margin-top: 10%;
-    height: 200px;
-    background-color: #08033f;
+
+.enunciado {
+  margin-top: 10%;
+  height: 200px;
+  background-color: #2b2d42;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

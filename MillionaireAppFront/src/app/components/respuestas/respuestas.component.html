@@ -9,7 +9,7 @@
           'btn-success': opcion.estadoColor === 'verde',
           'btn-danger': opcion.estadoColor === 'rojo'
         }"
-        [disabled]="animationInterval && seleccionada !== opcion"
+        [disabled]="animationInterval"
         (click)="cambiarColor(opcion)">
         {{ opcion.textoOpcion }}
       </button>

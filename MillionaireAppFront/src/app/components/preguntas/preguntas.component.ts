@@ -1,43 +1,50 @@
-import { Component, OnInit, Input, Output ,EventEmitter} from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { PreguntaService } from '../../services/pregunta.service';
 import { Preguntas } from '../../models/preguntas.model';
+
 @Component({
   selector: 'app-preguntas',
   templateUrl: './preguntas.component.html',
   styleUrls: ['./preguntas.component.css'],
 })
 export class PreguntasComponent implements OnInit {
-  preguntaId2: number=1;
+  preguntaId2: number = 1;
   preguntaId: number = 1;
-  comparador: number= this.preguntaId;
+  comparador: number = this.preguntaId;
   textoPregunta: string = '';
+  manejarRespuestaCorrecta = new EventEmitter<void>(); // Definir el EventEmitter
+  private respuestasCorrectasContador: number = 0;
   constructor(private preguntaService: PreguntaService) {}
 
   ngOnInit() {
-    console.log(this.comparador);
-    console.log(this.preguntaId);
-    this.preguntaService.preguntaId$.subscribe( preguntaId1 => {
-      if(preguntaId1 != undefined){
+    this.preguntaService.preguntaId$.subscribe(preguntaId1 => {
+      if (preguntaId1 != undefined) {
         this.preguntaId2 = preguntaId1;
-        if (preguntaId1 % 5 == 0) {
-         this.preguntaId++; // Cambiar la dificultad
-       }
+        if (preguntaId1 % 5 === 0) {
+          this.preguntaId++; // Cambiar la dificultad
+        }
       }
     });
-    if(this.comparador !=this.preguntaId2){
-      this.comparador = this.preguntaId2;
-      this.manejarRespuestaCorrecta();
-    }
-    else(this.cargarPregunta(this.preguntaId));
+    this.cargarPregunta(this.preguntaId);
+
+    // Suscribirnos al evento
+    this.manejarRespuestaCorrecta.subscribe(() => {
+      this.manejarRespuestaCorrectaHandler();
+    });
   }
-// Dentro de la clase PreguntasComponent
-// Método para manejar la respuesta correcta
-manejarRespuestaCorrecta() {
-   setTimeout(() => {
-    console.log('Cargando nueva pregunta...'); // Mensaje de depuración
-    this.cargarPregunta(this.preguntaId); // Cargar nueva pregunta después de 5 segundos
-  }, 5000);
-}
+
+  manejarRespuestaCorrectaHandler() {
+    this.respuestasCorrectasContador++;
+    if (this.respuestasCorrectasContador % 5 === 0) {
+      console.log('Cambiando la dificultad...'); // Mensaje de depuración
+      this.preguntaId++; // Cambiar la dificultad después de cada 5 respuestas correctas
+    }
+    setTimeout(() => {
+      console.log('Cargando nueva pregunta...'); // Mensaje de depuración
+      this.cargarPregunta(this.preguntaId); // Cargar nueva pregunta después de 5 segundos
+    }, 5000);
+  }
+
   cargarPregunta(id: number) {
     this.preguntaService.obtenerPorDif(id).subscribe({
       next: (preguntas: Preguntas[]) => {
