@@ -1,8 +1,10 @@
-<div class="current-score">
+<div class="current-score animate__animated"
+     [ngClass]="{'animate__wobble': animated=='animate__wobble'
+                ,'animate__backInDown':animated=='animate__backInDown'}">
   Puntos actuales: {{ currentScore }}
 </div>
 <div class="table-responsive">
-  <table class="table">
+  <table class="table animate__animated animate__backInDown">
     <thead>
       <tr>
         <th>Nivel</th>
@@ -10,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let level of preguntaEstado; let i = index" [class.bg-success]="preguntaEstado[i]">
+      <tr class="animate__animated" *ngFor="let level of preguntaEstado; let i = index"[ngClass]="{'animate__flash':getColorEstado(i) === 'verde'}">
         <td [ngClass]="{
           'bg-success': getColorEstado(i) === 'verde',
           'bg-warning': getColorEstado(i) === 'amarillo',

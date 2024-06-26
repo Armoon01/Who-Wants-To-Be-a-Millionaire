@@ -1,8 +1,8 @@
-<div class="answer-options-container">
+<div class="answer-options-container animate__animated animate__backInUp">
   <div *ngFor="let opcion of opciones" class="row answer-option">
-    <div class="container" >
+    <div class="container">
       <button 
-        class="btn fullBoton animate__animated animate__fadeInLeft" 
+        class="btn fullBoton animate__bounce" 
         [ngClass]="{
           'btn-primary': opcion.estadoColor === '',
           'btn-warning': opcion.estadoColor === 'amarillo',
