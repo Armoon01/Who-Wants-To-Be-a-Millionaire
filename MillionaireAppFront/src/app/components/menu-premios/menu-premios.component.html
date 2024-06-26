@@ -1,0 +1,23 @@
+<div class="current-score">
+  Puntos actuales: {{ currentScore }}
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nivel</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let level of preguntaEstado; let i = index" [class.bg-success]="preguntaEstado[i]">
+        <td [ngClass]="{
+          'bg-success': getColorEstado(i) === 'verde'
+        }">{{ 15 - i }}</td>
+        <td [ngClass]="{
+          'bg-success': getColorEstado(i) === 'verde'
+        }">{{ (15 - i) * 100 }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

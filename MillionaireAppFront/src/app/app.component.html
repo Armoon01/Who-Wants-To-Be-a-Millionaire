@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3 px-1">
+            <app-menu-premios #menuPremiosComponent></app-menu-premios>
+        </div>
+        <div class="col-9 px-1 preguntas">
+           <div class="row">
+                <div class="col-1">
+                </div>
+                <div class="col-10 enunciado">
+                    <app-preguntas #preguntasComponent></app-preguntas>
+                </div> 
+                <div class="col-1">
+                </div>
+           </div>
+           <div class="row">
+                <div class="col-1">
+                </div>
+                <div class="col-10">
+                    <app-respuestas (respuestaCorrecta)="preguntasComponent.manejarRespuestaCorrecta()" (aumentarPuntaje)="menuPremiosComponent.aumentarPuntaje($event)"></app-respuestas>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div><app-comodines></app-comodines></div>

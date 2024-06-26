@@ -1,0 +1,18 @@
+<div class="answer-options-container">
+  <div *ngFor="let opcion of opciones" class="row answer-option">
+    <div class="container">
+      <button 
+        class="btn fullBoton" 
+        [ngClass]="{
+          'btn-primary': opcion.estadoColor === '',
+          'btn-warning': opcion.estadoColor === 'amarillo',
+          'btn-success': opcion.estadoColor === 'verde',
+          'btn-danger': opcion.estadoColor === 'rojo'
+        }"
+        [disabled]="animationInterval && seleccionada !== opcion"
+        (click)="cambiarColor(opcion)">
+        {{ opcion.textoOpcion }}
+      </button>
+    </div>
+  </div>
+</div>

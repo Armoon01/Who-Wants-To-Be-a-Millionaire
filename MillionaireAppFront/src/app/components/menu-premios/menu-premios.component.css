@@ -1,0 +1,39 @@
+.progress-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #f1f1f1;
+    border-right: 2px solid #ccc;
+    margin-top: 20px;
+  }
+  
+  .level {
+    padding: 10px; /* Ajusta el padding según sea necesario */
+     /* Ajusta el margen según sea necesario */
+  }
+  
+  .current-score {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  .bg-success {
+    background-color: #379777 !important;
+  }
+  
+  .bg-danger {
+    background-color: red !important;
+  }
+  
+  .current-score {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .current-score {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  .success {
+    background-color: #d4edda; /* Color de fondo verde suave */
+    color: #155724; /* Color de texto oscuro */
+  }

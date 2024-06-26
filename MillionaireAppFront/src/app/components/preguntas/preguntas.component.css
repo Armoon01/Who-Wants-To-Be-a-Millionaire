@@ -1,0 +1,18 @@
+.question-container{
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 5px;
+    height: 95%;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    border: none;
+}
+.question-text {
+    font-size: 24px; /* Tamaño de fuente más grande */
+    font-family: 'Arial', sans-serif; /* Tipografía personalizada */
+    font-weight: bold; /* Negrita, si es necesario */
+    color: #333; /* Color del texto */
+    text-align: center;
+  }

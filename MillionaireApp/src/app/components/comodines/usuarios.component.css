@@ -1,0 +1,14 @@
+.lifelines-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #c1c1c1;
+  }
+  
+  .lifeline {
+    width: 20%;
+    padding: 10px;
+    background-color: #b1b1b1;
+    text-align: center;
+    cursor: pointer;
+  }
