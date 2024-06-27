@@ -1,15 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { ComodinesComponent } from './components/comodines/comodines.component';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RespuestasComponent } from './components/respuestas/respuestas.component';
+import { ComodinesComponent } from './components/comodines/comodines.component';
 import { PreguntasComponent } from './components/preguntas/preguntas.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'MillionaireAppFront';
+export class AppComponent implements AfterViewInit {
   @ViewChild(RespuestasComponent) respuestasComponent!: RespuestasComponent;
   @ViewChild(ComodinesComponent) comodinesComponent!: ComodinesComponent;
   @ViewChild(PreguntasComponent) preguntasComponent!: PreguntasComponent;

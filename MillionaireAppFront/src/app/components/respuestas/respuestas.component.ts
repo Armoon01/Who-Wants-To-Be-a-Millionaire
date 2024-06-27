@@ -12,10 +12,10 @@ export class RespuestasComponent implements OnInit {
   @Output() aumentarPuntaje = new EventEmitter<number>();
   @Output() manejarRespuestaCorrecta = new EventEmitter<void>();
   @Output() manejarRespuestaIncorrecta = new EventEmitter<void>();
-  @Input() useFiftyFifty!: EventEmitter<void>;
-  @Input() useSelectOne!: EventEmitter<void>;
+  @Input() useFiftyFifty: EventEmitter<void> = new EventEmitter<void>();
+  @Input() useSelectOne: EventEmitter<void> = new EventEmitter<void>();
 
-  opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string }[] = [];
+  opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string, disabled: boolean }[] = [];
   protected animationInterval: any;
   protected seleccionada: any = null; // Variable para rastrear la opción seleccionada
   protected selectOneActive: boolean = false;
@@ -37,13 +37,13 @@ export class RespuestasComponent implements OnInit {
   cargarRespuestas(preguntaId: number) {
     this.opcionRespuestaService.obtenerPorPregunta(preguntaId).subscribe({
       next: (respuestas) => {
-        this.opciones = this.ordenarAleatoriamente(this.seleccionarRespuestasAleatorias(respuestas, 4)).map(opcion => ({ ...opcion, estadoColor: '' }));
+        this.opciones = this.ordenarAleatoriamente(this.seleccionarRespuestasAleatorias(respuestas, 4)).map(opcion => ({ ...opcion, estadoColor: '', disabled: false }));
         this.seleccionada = null; // Reiniciar la selección
         this.clearAnimationInterval(); // Limpiar el intervalo de animación
       },
       error: (error) => console.error(error)
     });
-      this.animated = 'animate__backInUp';
+    this.animated = 'animate__backInUp';
   }
 
   seleccionarRespuestasAleatorias(respuestas: any[], cantidad: number): any[] {
@@ -70,14 +70,9 @@ export class RespuestasComponent implements OnInit {
 
   cambiarColor(opcion: any) {
     if (this.seleccionada === opcion) {
-      if (this.selectOneActive) {
-        this.selectOneActive = false;
-        this.iniciarAnimacion(opcion);
-      } else {
-        this.iniciarAnimacion(opcion);
-      }
+      this.iniciarAnimacion(opcion);
     } else {
-      if (this.seleccionada !== null) {
+      if (this.seleccionada !== null && !this.selectOneActive) {
         this.seleccionada.estadoColor = '';
       }
       opcion.estadoColor = 'amarillo';
@@ -91,32 +86,45 @@ export class RespuestasComponent implements OnInit {
       opcion.estadoColor = counter % 2 === 0 ? 'rojo' : 'verde';
       counter++;
     }, 200);
+      this.opciones.forEach(op => op.disabled = true); // Deshabilitar todas las opciones
     setTimeout(() => {
       clearInterval(this.animationInterval);
       if (!opcion.esCorrecta) {
-        setTimeout(() => {
+        if (this.selectOneActive) {
+          this.opciones.forEach(op => op.disabled = false);// Habilitar todas las opciones
+          opcion.estadoColor = 'rojo';
+          setTimeout(() => {
+            opcion.estadoColor = 'transparente';
+            opcion.disabled = true; // Deshabilitar la opción incorrecta
+            this.seleccionada = null;
+            this.selectOneActive = false;
+          }, 1000);
+          
+        } else {     
+          this.opciones.forEach(op => op.disabled = true); // Deshabilitar todas las opciones
           const opcionCorrecta = this.opciones.find(op => op.esCorrecta);
           if (opcionCorrecta) {
             opcionCorrecta.estadoColor = 'verde';
           }
           this.seleccionada = null;
-        }, 1001);
-        opcion.estadoColor = 'rojo';
-        this.manejarRespuestaIncorrecta.emit(); // Emitir evento para manejar la respuesta incorrecta
+          opcion.estadoColor = 'rojo';
+          this.manejarRespuestaIncorrecta.emit(); // Emitir evento para manejar la respuesta incorrecta
+        }
       } else {
         this.preguntaService.actualizarPreguntaCorrecta(1);
         this.manejarRespuestaCorrecta.emit(); // Emitir evento para manejar la respuesta correcta
         this.aumentarPuntaje.emit(100); // Emitir evento para aumentar el puntaje
-
         setTimeout(() => {
           opcion.estadoColor = 'verde';
           this.seleccionada = null;
         }, 2000);
       }
     }, 2000);
-    setTimeout(() => {
-      this.animated = 'animate__fadeOut';
-    }, 3500);
+    if (!this.selectOneActive) {
+      setTimeout(() => {
+        this.animated = 'animate__fadeOut';
+      }, 3500);
+    }
   }
 
   activarFiftyFifty() {
@@ -130,6 +138,7 @@ export class RespuestasComponent implements OnInit {
     }
     indices.forEach(index => {
       respuestasIncorrectas[index].estadoColor = 'transparente';
+      respuestasIncorrectas[index].disabled = true; // Deshabilitar la opción
     });
   }
 

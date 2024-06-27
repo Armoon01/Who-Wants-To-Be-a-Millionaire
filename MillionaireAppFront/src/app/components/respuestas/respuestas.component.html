@@ -13,7 +13,7 @@
           'btn-danger': opcion.estadoColor === 'rojo',
           'btn-transparente': opcion.estadoColor === 'transparente'
         }"
-        [disabled]="animationInterval"
+        [disabled]="opcion.disabled"
         (click)="cambiarColor(opcion)">
         {{ opcion.textoOpcion }}
       </button>
