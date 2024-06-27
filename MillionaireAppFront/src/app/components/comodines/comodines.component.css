@@ -19,6 +19,10 @@
 }
 
 .lifeline:hover {
-  background-color: #ef233c;
+  background-color: #978b06;
   transform: scale(1.1);
+}
+.btn-lifeline{
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
 }

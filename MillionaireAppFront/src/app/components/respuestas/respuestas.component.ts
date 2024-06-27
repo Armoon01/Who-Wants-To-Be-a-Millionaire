@@ -9,33 +9,35 @@ import { PreguntaService } from '../../services/pregunta.service';
 })
 export class RespuestasComponent implements OnInit {
 
-  preguntaId2!: number;
   @Output() aumentarPuntaje = new EventEmitter<number>();
   @Output() manejarRespuestaCorrecta = new EventEmitter<void>();
   @Output() manejarRespuestaIncorrecta = new EventEmitter<void>();
+  @Input() useFiftyFifty!: EventEmitter<void>;
+  @Input() useSelectOne!: EventEmitter<void>;
+
   opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string }[] = [];
   protected animationInterval: any;
   protected seleccionada: any = null; // Variable para rastrear la opción seleccionada
+  protected selectOneActive: boolean = false;
   animated: string = 'animate__backInUp';
+
   constructor(private opcionRespuestaService: OpcionRespuestaService, private preguntaService: PreguntaService) {}
 
   ngOnInit() {
     this.preguntaService.preguntaId2$.subscribe(preguntaId2 => {
       if (preguntaId2 != undefined) {
-        console.log(preguntaId2);
         this.cargarRespuestas(preguntaId2);
       }
     });
+
+    this.useFiftyFifty.subscribe(() => this.activarFiftyFifty());
+    this.useSelectOne.subscribe(() => this.activarSelectOne());
   }
 
   cargarRespuestas(preguntaId: number) {
     this.opcionRespuestaService.obtenerPorPregunta(preguntaId).subscribe({
       next: (respuestas) => {
-        console.log('Respuestas recibidas:', respuestas); // Verificar los datos recibidos
-        let respuestasSeleccionadas = this.seleccionarRespuestasAleatorias(respuestas, 4);
-        console.log('Respuestas seleccionadas:', respuestasSeleccionadas); // Verificar después de seleccionar
-        this.opciones = this.ordenarAleatoriamente(respuestasSeleccionadas).map(opcion => ({ ...opcion, estadoColor: '' }));
-        console.log('Opciones finales:', this.opciones); // Verificar el estado final
+        this.opciones = this.ordenarAleatoriamente(this.seleccionarRespuestasAleatorias(respuestas, 4)).map(opcion => ({ ...opcion, estadoColor: '' }));
         this.seleccionada = null; // Reiniciar la selección
         this.clearAnimationInterval(); // Limpiar el intervalo de animación
       },
@@ -68,7 +70,12 @@ export class RespuestasComponent implements OnInit {
 
   cambiarColor(opcion: any) {
     if (this.seleccionada === opcion) {
-      this.iniciarAnimacion(opcion);
+      if (this.selectOneActive) {
+        this.selectOneActive = false;
+        this.iniciarAnimacion(opcion);
+      } else {
+        this.iniciarAnimacion(opcion);
+      }
     } else {
       if (this.seleccionada !== null) {
         this.seleccionada.estadoColor = '';
@@ -110,6 +117,24 @@ export class RespuestasComponent implements OnInit {
     setTimeout(() => {
       this.animated = 'animate__fadeOut';
     }, 3500);
+  }
+
+  activarFiftyFifty() {
+    const respuestasIncorrectas = this.opciones.filter(opcion => !opcion.esCorrecta);
+    const indices: number[] = [];
+    while (indices.length < 2) {
+      const index = Math.floor(Math.random() * respuestasIncorrectas.length);
+      if (!indices.includes(index)) {
+        indices.push(index);
+      }
+    }
+    indices.forEach(index => {
+      respuestasIncorrectas[index].estadoColor = 'transparente';
+    });
+  }
+
+  activarSelectOne() {
+    this.selectOneActive = true;
   }
 
   clearAnimationInterval() {

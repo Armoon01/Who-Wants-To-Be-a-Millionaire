@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { PreguntaService } from '../../services/pregunta.service';
 import { Preguntas } from '../../models/preguntas.model';
 
@@ -8,6 +8,7 @@ import { Preguntas } from '../../models/preguntas.model';
   styleUrls: ['./preguntas.component.css'],
 })
 export class PreguntasComponent implements OnInit {
+  @Output() cambiarPregunta = new EventEmitter<void>(); // Agregar EventEmitter
   preguntaId2: number = 1;
   preguntaId: number = 1;
   comparador: number = this.preguntaId;
@@ -33,6 +34,9 @@ export class PreguntasComponent implements OnInit {
     // Suscribirnos al evento
     this.manejarRespuestaCorrecta.subscribe(() => {
       this.manejarRespuestaCorrectaHandler();
+    });
+    this.cambiarPregunta.subscribe(() => {
+      this.cargarPregunta(this.preguntaId); // Cargar nueva pregunta cuando se use el comodín
     });
   }
 

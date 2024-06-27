@@ -1,5 +1,10 @@
 <div class="lifelines-container animate__animated animate__backInLeft">
   <div *ngFor="let lifeline of lifelines" class="lifeline">
-    {{ lifeline }}
+    <button 
+      class="btn btn-primary btn-lifeline" 
+      (click)="activateLifeline(lifeline.name)" 
+      [disabled]="lifeline.used">
+      {{ lifeline.name }}
+    </button>
   </div>
 </div>

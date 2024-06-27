@@ -45,3 +45,6 @@
 .btn-success {
   background-color: #2b9348;
 }
+.btn-transparente {
+  visibility: hidden;
+}

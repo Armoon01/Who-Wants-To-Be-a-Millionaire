@@ -8,12 +8,6 @@ body {
 body, html {
   overflow: hidden;
 }
-
-/* Asegúrate de que no haya márgenes o padding que causen desplazamiento */
-body {
-  margin: 0;
-  padding: 0;
-}
 .container {
   max-width: 1200px;
   margin: 0 auto;
