@@ -1,3 +1,6 @@
-<div class="question-container animate__animated animate__backInDown">
+<div class="question-container animate__animated"
+  [ngClass]="{'animate__backInDown': animated=='animate__backInDown'
+  ,'animate__fadeOut': animated=='animate__fadeOut'
+  }">
   <p class="question-text">{{ textoPregunta }}</p>
 </div>

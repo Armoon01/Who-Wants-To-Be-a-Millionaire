@@ -1,4 +1,7 @@
-<div class="answer-options-container animate__animated animate__backInUp">
+<div class="answer-options-container animate__animated"
+[ngClass]="{'animate__backInUp': animated=='animate__backInUp'
+,'animate__fadeOut': animated=='animate__fadeOut'
+}">
   <div *ngFor="let opcion of opciones" class="row answer-option">
     <div class="container">
       <button 

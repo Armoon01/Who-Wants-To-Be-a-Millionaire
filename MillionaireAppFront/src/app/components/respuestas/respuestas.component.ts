@@ -16,7 +16,7 @@ export class RespuestasComponent implements OnInit {
   opciones: { textoOpcion: string, esCorrecta: boolean, estadoColor: string }[] = [];
   protected animationInterval: any;
   protected seleccionada: any = null; // Variable para rastrear la opción seleccionada
-
+  animated: string = 'animate__backInUp';
   constructor(private opcionRespuestaService: OpcionRespuestaService, private preguntaService: PreguntaService) {}
 
   ngOnInit() {
@@ -41,6 +41,7 @@ export class RespuestasComponent implements OnInit {
       },
       error: (error) => console.error(error)
     });
+      this.animated = 'animate__backInUp';
   }
 
   seleccionarRespuestasAleatorias(respuestas: any[], cantidad: number): any[] {
@@ -106,6 +107,9 @@ export class RespuestasComponent implements OnInit {
         }, 2000);
       }
     }, 2000);
+    setTimeout(() => {
+      this.animated = 'animate__fadeOut';
+    }, 3500);
   }
 
   clearAnimationInterval() {

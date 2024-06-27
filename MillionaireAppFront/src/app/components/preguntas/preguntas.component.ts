@@ -12,6 +12,7 @@ export class PreguntasComponent implements OnInit {
   preguntaId: number = 1;
   comparador: number = this.preguntaId;
   textoPregunta: string = '';
+  animated: string = 'animate__backInDown';
   manejarRespuestaCorrecta = new EventEmitter<void>(); // Definir el EventEmitter
   private respuestasCorrectasContador: number = 0;
   private preguntasMostradas: number[] = []; // Arreglo para almacenar los IDs de las preguntas mostradas
@@ -42,9 +43,13 @@ export class PreguntasComponent implements OnInit {
       this.preguntaId++; // Cambiar la dificultad después de cada 5 respuestas correctas
     }
     setTimeout(() => {
+      this.animated = 'animate__fadeOut';
+    }, 1500);
+    setTimeout(() => {
       console.log('Cargando nueva pregunta...'); // Mensaje de depuración
       this.cargarPregunta(this.preguntaId); // Cargar nueva pregunta después de 5 segundos
-    }, 5000);
+      this.animated = 'animate__backInDown';
+    }, 3000);
   }
 
   cargarPregunta(id: number) {
@@ -66,7 +71,6 @@ export class PreguntasComponent implements OnInit {
           if (this.preguntasMostradas.includes(preguntaAleatoria.preguntaID)) {
             preguntaAleatoria = preguntas.find(p => !this.preguntasMostradas.includes(p.preguntaID));
           }
-
           if (preguntaAleatoria) {
             this.textoPregunta = preguntaAleatoria.textoPregunta;
             this.preguntaService.actualizarPreguntaId2(preguntaAleatoria.preguntaID);

@@ -32,7 +32,7 @@ export class MenuPremiosComponent implements OnInit {
   // Reiniciar la animación
   this.animated = ''; // Primero, quitar la clase para resetear la animación
   setTimeout(() => {
-    this.animated = 'animate__wobble'; // Luego, agregar la clase nuevamente
+    this.animated = 'animate__shakeX'; // Luego, agregar la clase nuevamente
   }, 10); // Pequeño retraso para asegurar que el navegador detecte el cambio
 
 
