@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MillionaireAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da3a1fa30586f9b0c115d046264b4e245086bf89")]
 [assembly: System.Reflection.AssemblyProductAttribute("MillionaireAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MillionaireAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\lunai\OneDrive\Escritorio\NyA Lifestyle\Who-Wants-To-Be-a-Millionaire\MillionaireAPI\obj\Release\net6.0\PubTmp\Out\" />
+  <dbfullsql path="C:\Users\lunai\OneDrive\Escritorio\NyA Lifestyle\Who-Wants-To-Be-a-Millionaire\MillionaireAPI\obj\Release\net6.0\PubTmp\EFSQLScripts\MillionaireAPI.DbContext.MillionaireDbContext.sql" />
+</sitemanifest>
